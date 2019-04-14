@@ -21,6 +21,12 @@ def load_data():
 
     return list_employee
 
+def write_data(list_employee):
+    file_name = '../resources/employee.txt'
+    with open(file_name, 'w') as f:
+        for employee in list_employee:
+            f.write(str(employee.emp_id)+','+employee.first_name+','
+                    +employee.sure_name+',' + employee.email +',' + str(employee.salary))
 
 def displayEmployee(employee):
     print(
@@ -45,6 +51,9 @@ def find_employee_pos_in_list(id, list_employee):
 
 
 def add_employee(emp_id, first_name, sure_name, email, salary):
+    emp_index = find_employee_pos_in_list(emp_id, list_employee)
+    if emp_index != -1:
+        return None
     new_employee = Employee(emp_id, first_name, sure_name, email, salary)
     list_employee.append(new_employee)
     return new_employee
@@ -54,13 +63,16 @@ def remove_employee(emp_id, list_employee):
     emp_index = find_employee_pos_in_list(emp_id, list_employee)
     if emp_index != -1:
         del list_employee[emp_index]
+    else:
+        print('ID: ' + str(emp_id) + ' is not associated with any employee.')
 
 
 def change_salary(emp_id, new_salary, list_employee):
     emp_index = find_employee_pos_in_list(emp_id, list_employee)
     if emp_index != -1:
         list_employee[emp_index].salary = new_salary
-    return list_employee[emp_index]
+        return list_employee[emp_index]
+    return None
 
 
 def add_bonus(bonus_in_percentage, employee):
@@ -88,6 +100,22 @@ def get_bonus_input(list_employee):
 
     return list_bonus
 
+def generate_reports(list_employee):
+    sum = 0
+    max = 0;
+    for employee in list_employee:
+        sum = sum + float(employee.salary)
+        if max < float(employee.salary):
+            max = float(employee.salary)
+
+    average_salary = sum / len(list_employee)
+    print('Average Salary='+str(average_salary))
+    print('Employees with max salary=' + str(max))
+    for employee in list_employee:
+        if float(employee.salary) == max:
+            displayEmployee(employee)
+
+
 
 if __name__ == '__main__':
 
@@ -98,6 +126,7 @@ if __name__ == '__main__':
         'Add a new employee',
         'Delete an employee',
         'Give a bonus to each employee and writes the details to a file',
+        'Generate a report for management',
         'Quit'
     ]
 
@@ -106,6 +135,8 @@ if __name__ == '__main__':
     while True:
         user_input = get_choices(menu_strings);
         if (int(user_input) >= len(menu_strings)) or (int(user_input) <= 0):
+            print('Write updated employee list in file and exit')
+            write_data(list_employee)
             sys.exit(0)
         if int(user_input) == 1:
             show_all_employee(list_employee)
@@ -121,7 +152,10 @@ if __name__ == '__main__':
             emp_id = input('Enter employee ID=')
             new_salary = input('Enter new salary=')
             employee = change_salary(emp_id, new_salary, list_employee)
-            displayEmployee(employee)
+            if employee is None:
+                print('ID: '+ str(emp_id) + ' is not associated with any employee.')
+            else:
+                displayEmployee(employee)
         elif int(user_input) == 4:
             emp_id = input('Enter employee ID=')
             first_name = input('Enter first name=')
@@ -129,11 +163,17 @@ if __name__ == '__main__':
             email = input('Enter email=')
             salary = input('Enter salary=')
             employee = add_employee(emp_id, first_name, sure_name, email, salary)
-            displayEmployee(employee)
+            if employee is None:
+                print('ID: '+ str(emp_id) + ' is already exist')
+            else:
+                displayEmployee(employee)
         elif int(user_input) == 5:
             emp_id = input('Enter employee ID=')
             remove_employee(emp_id, list_employee)
-        else:
+        elif int(user_input) == 6:
             list_bonus = get_bonus_input(list_employee)
             generate_bonus_info('../resources/bonus.txt', list_bonus, list_employee)
+        else:
+            print('generate report')
+            generate_reports(list_employee)
 
