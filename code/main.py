@@ -1,12 +1,14 @@
 from employee import Employee
 import sys
 
+
 def get_choices(menu_strings):
     print('Choices:')
     for i in range(len(menu_strings)):
         print(str(i+1) + ': '+ menu_strings[i])
     user_input = input('Enter your choice [1 - ' + str(len(menu_strings))+ ']: ')
     return user_input
+
 
 def load_data():
     file_name = '../resources/employee.txt'
@@ -20,16 +22,19 @@ def load_data():
     return list_employee
 
 
+def displayEmployee(employee):
+    print(
+        "ID:" + str(employee.emp_id) +
+        ",First Name:" + employee.first_name +
+        ",Sure Name:" + employee.sure_name +
+        ",Email:" + employee.email +
+        ",Salary:" + str(employee.salary)
+    )
+
+
 def show_all_employee(list_employee):
     for employee in list_employee:
-        print(employee.displayEmployee())
-
-
-def show_an_employee(emp_id, list_employee):
-    emp_index = find_employee_pos_in_list(emp_id, list_employee)
-    print(emp_index)
-    if emp_index != -1:
-        list_employee[emp_index].displayEmployee()
+        displayEmployee(employee)
 
 
 def find_employee_pos_in_list(id, list_employee):
@@ -95,7 +100,9 @@ if __name__ == '__main__':
         'Give a bonus to each employee and writes the details to a file',
         'Quit'
     ]
+
     list_employee = load_data()
+
     while True:
         user_input = get_choices(menu_strings);
         if (int(user_input) >= len(menu_strings)) or (int(user_input) <= 0):
@@ -106,12 +113,15 @@ if __name__ == '__main__':
             emp_id = input('Enter employee ID=')
             pos = find_employee_pos_in_list(emp_id, list_employee)
             print(pos)
-            list_employee[pos].displayEmployee()
+            if pos != -1:
+                displayEmployee(list_employee[pos])
+            else:
+                print('ID: '+ str(emp_id) + ' is not associated with any employee.')
         elif int(user_input) == 3:
             emp_id = input('Enter employee ID=')
             new_salary = input('Enter new salary=')
             employee = change_salary(emp_id, new_salary, list_employee)
-            employee.displayEmployee()
+            displayEmployee(employee)
         elif int(user_input) == 4:
             emp_id = input('Enter employee ID=')
             first_name = input('Enter first name=')
@@ -119,7 +129,7 @@ if __name__ == '__main__':
             email = input('Enter email=')
             salary = input('Enter salary=')
             employee = add_employee(emp_id, first_name, sure_name, email, salary)
-            employee.displayEmployee()
+            displayEmployee(employee)
         elif int(user_input) == 5:
             emp_id = input('Enter employee ID=')
             remove_employee(emp_id, list_employee)
