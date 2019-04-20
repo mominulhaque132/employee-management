@@ -1,8 +1,13 @@
 from employee import Employee
 import sys
-
+import random
 
 def get_choices(menu_strings):
+    """
+     This mothod selects the user menu choices
+    :param menu_strings: A list of menu choice
+    :return: A particlar menu as user input.
+    """
     print('Choices:')
     for i in range(len(menu_strings)):
         print(str(i+1) + ': '+ menu_strings[i])
@@ -11,24 +16,39 @@ def get_choices(menu_strings):
 
 
 def load_data():
+    """
+    This method read a file to load a list of Employee.
+    :return: a list of Employee
+    """
     file_name = '../resources/employee.txt'
     list_employee = []
     with open(file_name) as f:
         for line in f:
-            tokens = line.split(',')
-            emp = Employee(tokens[0],tokens[1],tokens[2], tokens[3], tokens[4])
+            tokens = line.rstrip('\n').split(',')
+            emp = Employee(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4])
             list_employee.append(emp)
 
     return list_employee
 
 def write_data(list_employee):
+    """
+    This method overwride employee.txt file using a new updated list of employee.
+    :param list_employee: a list if Employee object.
+    :return: void
+    """
     file_name = '../resources/employee.txt'
     with open(file_name, 'w') as f:
         for employee in list_employee:
             f.write(str(employee.emp_id)+','+employee.first_name+','
-                    +employee.sure_name+',' + employee.email +',' + str(employee.salary))
+                    +employee.sure_name+',' + employee.email +',' + str(employee.salary) + '\n')
 
 def displayEmployee(employee):
+    """
+    load Empolyee details
+
+    :param employee: List of Employee
+    :return: void
+    """
     print(
         "ID:" + str(employee.emp_id) +
         ",First Name:" + employee.first_name +
@@ -39,18 +59,57 @@ def displayEmployee(employee):
 
 
 def show_all_employee(list_employee):
+    """
+    Display the list of employee
+
+    :param list_employee: list of Employee
+    :return: List of Employee
+    """
     for employee in list_employee:
         displayEmployee(employee)
 
 
 def find_employee_pos_in_list(id, list_employee):
+    """
+    Search a particular Employee with ID no.
+
+    :param id: Unique Employee ID
+    :param list_employee: List of Employees
+    :return: List of employee
+    """
     for i in range(len(list_employee)):
         if list_employee[i].emp_id == str(id):
             return i
     return -1
 
+def generate_uniquie_id(list_employee):
+    """
+    Generates Unique Employee ID
+    :param list_employee: List of Employees
+    :return: New Employee ID
+    """
+    list_employee_id = []
+    for i in range(len(list_employee)):
+        list_employee_id.insert(len(list_employee_id), list_employee[i])
+
+    valid = False
+    while valid == False:
+        new_id = random.randint(100000, 999999)
+        if not new_id in list_employee_id:
+            valid = True
+    return new_id
 
 def add_employee(emp_id, first_name, sure_name, email, salary):
+    """
+    Add new employee
+
+    :param emp_id: Unique Employee ID
+    :param first_name: Load First name
+    :param sure_name:Load surname
+    :param email: Load email address
+    :param salary:Load salary
+    :return: New Employee
+    """
     emp_index = find_employee_pos_in_list(emp_id, list_employee)
     if emp_index != -1:
         return None
@@ -60,6 +119,13 @@ def add_employee(emp_id, first_name, sure_name, email, salary):
 
 
 def remove_employee(emp_id, list_employee):
+    """
+    Delete a particular Employee with unique employee ID
+
+    :param emp_id: Unique Employee ID
+    :param list_employee: New Employee list
+    :return: a new Employee list
+    """
     emp_index = find_employee_pos_in_list(emp_id, list_employee)
     if emp_index != -1:
         del list_employee[emp_index]
@@ -68,6 +134,13 @@ def remove_employee(emp_id, list_employee):
 
 
 def change_salary(emp_id, new_salary, list_employee):
+    """
+    Update salary for a particular Employee
+    :param emp_id: Unique Employee ID
+    :param new_salary: Updated salary
+    :param list_employee: New list of Employee with updated salary
+    :return: Updated salary
+    """
     emp_index = find_employee_pos_in_list(emp_id, list_employee)
     if emp_index != -1:
         list_employee[emp_index].salary = new_salary
@@ -76,12 +149,26 @@ def change_salary(emp_id, new_salary, list_employee):
 
 
 def add_bonus(bonus_in_percentage, employee):
+    """
+    Calculate bonus for an employee based on given parcentage
 
+    :param bonus_in_percentage: take the parcentage of bonus
+    :param employee: lisyt of employee
+    :return: A Tuple of Employee(ID, First name, last name, total bonus)
+    """
     total_bonus = (float(employee.salary) * int(bonus_in_percentage)) // 100
     return employee.emp_id, employee.first_name, employee.sure_name, total_bonus
 
 
 def generate_bonus_info(bonus_info_file, list_bonus, list_employee):
+    """
+    Generate bonus file
+
+    :param bonus_info_file: New bonus info file
+    :param list_bonus: update bonus for all employee
+    :param list_employee: Employee list
+    :return:
+    """
     list_employee_with_bonus = []
     for i in range(len(list_employee)):
         list_employee_with_bonus.append(add_bonus(list_bonus[i], list_employee[i]))
@@ -93,6 +180,13 @@ def generate_bonus_info(bonus_info_file, list_bonus, list_employee):
 
 
 def get_bonus_input(list_employee):
+    """
+    This method reads the percentage of bonus from the user and
+     calculate bonus  for the Employees
+
+    :param list_employee: Employee list
+    :return:how much Bonus gets every Employee
+    """
     list_bonus = []
     for i in range(len(list_employee)):
         bonus = input(str(list_employee[i].emp_id) + ': Add bonus=')
@@ -101,6 +195,11 @@ def get_bonus_input(list_employee):
     return list_bonus
 
 def generate_reports(list_employee):
+    """
+    Generates a list of Employee with maximum and Average salary
+    :param list_employee:check the list of Employees
+    :return:void
+    """
     sum = 0
     max = 0;
     for employee in list_employee:
@@ -127,11 +226,11 @@ if __name__ == '__main__':
         'Delete an employee',
         'Give a bonus to each employee and writes the details to a file',
         'Generate a report for management',
-        'Quit'
+        'Quit and Save Reports'
     ]
 
     list_employee = load_data()
-
+    # This loop get choices from user.
     while True:
         user_input = get_choices(menu_strings);
         if (int(user_input) >= len(menu_strings)) or (int(user_input) <= 0):
@@ -157,10 +256,10 @@ if __name__ == '__main__':
             else:
                 displayEmployee(employee)
         elif int(user_input) == 4:
-            emp_id = input('Enter employee ID=')
+            emp_id = generate_uniquie_id(list_employee)
             first_name = input('Enter first name=')
             sure_name = input('Enter sure name=')
-            email = input('Enter email=')
+            email = first_name + '.' + sure_name +'.' + str(emp_id) + '@mycit.ie'
             salary = input('Enter salary=')
             employee = add_employee(emp_id, first_name, sure_name, email, salary)
             if employee is None:
