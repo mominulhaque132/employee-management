@@ -34,7 +34,6 @@ def write_data(list_employee):
     """
     This method overwride employee.txt file using a new updated list of employee.
     :param list_employee: a list if Employee object.
-    :return: void
     """
     file_name = '../resources/employee.txt'
     with open(file_name, 'w') as f:
@@ -44,10 +43,9 @@ def write_data(list_employee):
 
 def displayEmployee(employee):
     """
-    load Empolyee details
+    Print an Empolyee object
 
-    :param employee: List of Employee
-    :return: void
+    :param employee: an instance of Employee.
     """
     print(
         "ID:" + str(employee.emp_id) +
@@ -63,7 +61,6 @@ def show_all_employee(list_employee):
     Display the list of employee
 
     :param list_employee: list of Employee
-    :return: List of Employee
     """
     for employee in list_employee:
         displayEmployee(employee)
@@ -73,9 +70,9 @@ def find_employee_pos_in_list(id, list_employee):
     """
     Search a particular Employee with ID no.
 
-    :param id: Unique Employee ID
+    :param id: an Employee ID
     :param list_employee: List of Employees
-    :return: List of employee
+    :return: index of an employee (-1 if not exist)
     """
     for i in range(len(list_employee)):
         if list_employee[i].emp_id == str(id):
@@ -104,11 +101,11 @@ def add_employee(emp_id, first_name, sure_name, email, salary):
     Add new employee
 
     :param emp_id: Unique Employee ID
-    :param first_name: Load First name
-    :param sure_name:Load surname
-    :param email: Load email address
-    :param salary:Load salary
-    :return: New Employee
+    :param first_name: First name of an employee
+    :param sure_name:surname of an employee
+    :param email: email address of an employee
+    :param salary:salary of an employee
+    :return: a new Employee
     """
     emp_index = find_employee_pos_in_list(emp_id, list_employee)
     if emp_index != -1:
@@ -123,8 +120,7 @@ def remove_employee(emp_id, list_employee):
     Delete a particular Employee with unique employee ID
 
     :param emp_id: Unique Employee ID
-    :param list_employee: New Employee list
-    :return: a new Employee list
+    :param list_employee: an Employee list
     """
     emp_index = find_employee_pos_in_list(emp_id, list_employee)
     if emp_index != -1:
@@ -138,8 +134,8 @@ def change_salary(emp_id, new_salary, list_employee):
     Update salary for a particular Employee
     :param emp_id: Unique Employee ID
     :param new_salary: Updated salary
-    :param list_employee: New list of Employee with updated salary
-    :return: Updated salary
+    :param list_employee: a list of Employee
+    :return: an employee (if exist) with new salary OR None, if not exist
     """
     emp_index = find_employee_pos_in_list(emp_id, list_employee)
     if emp_index != -1:
@@ -154,7 +150,7 @@ def add_bonus(bonus_in_percentage, employee):
 
     :param bonus_in_percentage: take the parcentage of bonus
     :param employee: lisyt of employee
-    :return: A Tuple of Employee(ID, First name, last name, total bonus)
+    :return: A Tuple of (emp_ID, First name, last name, total bonus)
     """
     total_bonus = (float(employee.salary) * int(bonus_in_percentage)) // 100
     return employee.emp_id, employee.first_name, employee.sure_name, total_bonus
@@ -164,10 +160,9 @@ def generate_bonus_info(bonus_info_file, list_bonus, list_employee):
     """
     Generate bonus file
 
-    :param bonus_info_file: New bonus info file
-    :param list_bonus: update bonus for all employee
+    :param bonus_info_file: a file to write bonus information
+    :param list_bonus: a list of bonus for all employee
     :param list_employee: Employee list
-    :return:
     """
     list_employee_with_bonus = []
     for i in range(len(list_employee)):
@@ -181,11 +176,10 @@ def generate_bonus_info(bonus_info_file, list_bonus, list_employee):
 
 def get_bonus_input(list_employee):
     """
-    This method reads the percentage of bonus from the user and
-     calculate bonus  for the Employees
+    This method takes input from user to give a percentage of bonus to each employee.
 
     :param list_employee: Employee list
-    :return:how much Bonus gets every Employee
+    :return:a list of bonuses (how much Bonus gets every Employee)
     """
     list_bonus = []
     for i in range(len(list_employee)):
@@ -196,9 +190,8 @@ def get_bonus_input(list_employee):
 
 def generate_reports(list_employee):
     """
-    Generates a list of Employee with maximum and Average salary
-    :param list_employee:check the list of Employees
-    :return:void
+    Generates and display a report to show Average salary and the employees with maximum salary.
+    :param list_employee:a list of Employee
     """
     sum = 0
     max = 0;
@@ -275,4 +268,3 @@ if __name__ == '__main__':
         else:
             print('generate report')
             generate_reports(list_employee)
-
