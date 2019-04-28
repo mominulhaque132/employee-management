@@ -1,3 +1,6 @@
+#Name: Mohammod Mominul haque
+#Student ID: R00144231
+
 class Employee:
     def __init__(self, emp_id, first_name, sure_name, email, salary):
         self.emp_id = emp_id

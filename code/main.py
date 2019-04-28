@@ -1,3 +1,6 @@
+#Name: Mohammod Mominul haque
+#Student ID: R00144231
+
 from employee import Employee
 import sys
 import random
@@ -6,7 +9,7 @@ def get_choices(menu_strings):
     """
      This mothod selects the user menu choices
     :param menu_strings: A list of menu choice
-    :return: A particlar menu as user input.
+    :return: A particular menu as user input.
     """
     print('Choices:')
     for i in range(len(menu_strings)):
@@ -50,7 +53,7 @@ def displayEmployee(employee):
     print(
         "ID:" + str(employee.emp_id) +
         ",First Name:" + employee.first_name +
-        ",Sure Name:" + employee.sure_name +
+        ",Sur Name:" + employee.sure_name +
         ",Email:" + employee.email +
         ",Salary:" + str(employee.salary)
     )
